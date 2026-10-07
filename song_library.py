@@ -68,3 +68,41 @@ class SongLibrary:
             result += f"Song index {index}:\n{song}\n\n"
 
         return result.rstrip()
+
+    def perform_search(self, search_attribute: str, search_attribute_value: str) -> Song | None:
+        search_attribute = search_attribute.lower()
+
+        if search_attribute == "index":
+            try:
+                index = int(search_attribute_value)
+            except ValueError:
+                return None
+
+            if 0 <= index < len(self._songs):
+                return self._songs[index]
+
+            return None
+
+        if search_attribute not in ("title", "artist", "genre", "rating"):
+            return None
+
+        for song in self._songs:
+            value = song.get_attribute_string_value(search_attribute)
+
+            if value == search_attribute_value.lower():
+                return song
+
+        return None
+
+    def get_song_index(self, song: Song) -> int:
+        for index, current_song in enumerate(self._songs):
+            if current_song is song:
+                return index
+
+        return -1
+
+    def perform_remove_song(self, index_to_remove: int) -> None:
+        if 0 <= index_to_remove < len(self._songs):
+            self._songs.pop(index_to_remove)
+
+    
