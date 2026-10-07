@@ -1,5 +1,15 @@
-from song_library import Song
+from song_library import Song, SongLibrary
 
-song1 = Song("Shape of You", "Ed Sheeran", "Pop", "shape_of_you.mp3", 5)
+library = SongLibrary()
 
-print(song1)
+print("Before adding songs:")
+print(library)
+
+song1 = Song("Blinding Lights", "The Weeknd", "Pop", "", 5)
+song2 = Song("Levitating", "Dua Lipa", "Pop", "", 3)
+
+library.perform_add_song(song1)
+library.perform_add_song(song2)
+
+print("\nAfter adding songs:")
+print(library)

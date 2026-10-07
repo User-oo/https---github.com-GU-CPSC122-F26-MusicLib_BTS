@@ -25,3 +25,46 @@ class Song:
             f"Clip: {self._clip}\n"
             f"Rating: {self._rating}"
         )
+    def get_attribute_string_value(self, attribute: str) -> str:
+        if attribute == "title":
+            return self._title
+        elif attribute == "artist":
+            return self._artist
+        elif attribute == "genre":
+            return self._genre
+        elif attribute == "rating":
+            return str(self._rating)
+        else:
+            return ""
+
+    def set_attribute_value(self, attribute: str, new_attribute_value: str) -> None:
+        if attribute == "title":
+            self._title = new_attribute_value.lower()
+        elif attribute == "artist":
+            self._artist = new_attribute_value.lower()
+        elif attribute == "genre":
+            self._genre = new_attribute_value.lower()
+        elif attribute == "clip":
+            self._clip = new_attribute_value
+        elif attribute == "rating":
+            self.set_rating(int(new_attribute_value))
+
+    def __lt__(self, other: "Song") -> bool:
+        return self._title < other._title
+
+class SongLibrary:
+    def __init__(self) -> None:
+        self._songs = []
+
+    def perform_add_song(self, new_song: Song) -> None:
+        self._songs.append(new_song)
+
+    def __str__(self) -> str:
+        if not self._songs:
+            return "The library is empty."
+
+        result = ""
+        for index, song in enumerate(self._songs):
+            result += f"Song index {index}:\n{song}\n\n"
+
+        return result.rstrip()
