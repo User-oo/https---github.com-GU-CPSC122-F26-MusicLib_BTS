@@ -3,7 +3,6 @@ from song_library import Song, SongLibrary
 library = SongLibrary()
 
 print("Before adding songs:")
-print(library)
 
 song1 = Song("Blinding Lights", "The Weeknd", "Pop", "", 5)
 song2 = Song("Levitating", "Dua Lipa", "Pop", "", 3)
@@ -12,7 +11,7 @@ library.perform_add_song(song1)
 library.perform_add_song(song2)
 
 print("\nAfter adding songs:")
-print(library)
+
 
 print("\nSearch by artist:")
 found_song = library.perform_search("artist", "Dua Lipa")
@@ -53,6 +52,19 @@ if found_song is not None:
     index = library.get_song_index(found_song)
     library.perform_remove_song(index)
 
+else:
+    print("Song not found.")
+
+
+library.perform_update_song(0, "rating", "4")
+print("\nAfter updating the rating of the first song:")
+print("\nUpdated Blinding Lights song:")
+
+found_song = library.perform_search("title", "Blinding Lights")
+if found_song is not None:
+    index = library.get_song_index(found_song)
+    library.perform_update_song(index, "rating", "4")
+    library.perform_update_song(index, "genre", "Synthwave")
 else:
     print("Song not found.")
 

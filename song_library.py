@@ -105,4 +105,7 @@ class SongLibrary:
         if 0 <= index_to_remove < len(self._songs):
             self._songs.pop(index_to_remove)
 
-    
+    def perform_update_song(self, index_to_update: int, attribute_to_update: str, new_attribute_value: str) -> None:
+        if 0 <= index_to_update < len(self._songs):
+            song_to_update = self._songs[index_to_update]
+            song_to_update.set_attribute_value(attribute_to_update, new_attribute_value)
