@@ -1,6 +1,7 @@
 class Song:
     MIN_RATING = 1
     MAX_RATING = 5
+    SORT_ATTRIBUTE = "title"
 
     def __init__(self, title_param: str = "", artist_param: str = "", genre_param: str = "", clip_param: str = "", rating_param: int = 1) -> None:
         self._title = title_param.lower()
@@ -109,3 +110,17 @@ class SongLibrary:
         if 0 <= index_to_update < len(self._songs):
             song_to_update = self._songs[index_to_update]
             song_to_update.set_attribute_value(attribute_to_update, new_attribute_value)
+
+    def perform_sort(self, attribute: str) -> None:
+        Song.SORT_ATTRIBUTE = attribute
+        self._songs.sort()
+
+    def perform_save(self, filename: str) -> None:
+        with open(filename, "w", encoding="utf-8") as file:
+            for song in self._songs:
+                file.write(f"{song.get_attribute_string_value('title')}\n")
+                file.write(f"{song.get_attribute_string_value('artist')}\n")
+                file.write(f"{song.get_attribute_string_value('genre')}\n")
+                file.write(f"{song.get_attribute_string_value('clip')}\n")
+                file.write(f"{song.get_attribute_string_value('rating')}\n")
+                file.write("\n")  
