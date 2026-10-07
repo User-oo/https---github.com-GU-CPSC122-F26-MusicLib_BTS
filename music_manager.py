@@ -1,14 +1,5 @@
-class MusicLib:
-    def __init__(self):
-        self.songs = []
+from song_library import Song
 
-    def add_song(self, song):
-        self.songs.append(song)
+song1 = Song("Shape of You", "Ed Sheeran", "Pop", "shape_of_you.mp3", 5)
 
-    def remove_song(self, song):
-        if song in self.songs:
-            self.songs.remove(song)
-
-    def list_songs(self):
-        return self.songs
-
+print(song1)
