@@ -143,7 +143,7 @@ class SongLibrary:
                 file.write(f"{song.get_attribute_string_value('title')}\n")
                 file.write(f"{song.get_attribute_string_value('artist')}\n")
                 file.write(f"{song.get_attribute_string_value('genre')}\n")
-                file.write(f"{song.get_attribute_string_value('clip')}\n")
+                file.write(f"{song._clip}\n")
                 file.write(f"{song.get_attribute_string_value('rating')}\n")
                 file.write("\n")  
 
@@ -165,3 +165,4 @@ class SongLibrary:
 
                 new_song = Song(title, artist, genre, clip, rating)
                 self.perform_add_song(new_song)
+        print(f"loading finished. Library Contains {len(self._songs)} songs.")

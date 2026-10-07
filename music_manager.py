@@ -1,105 +1,93 @@
 from song_library import Song, SongLibrary
 
 
-library = SongLibrary()
+def display_menu() -> None:
+    print("\n--- Music Library Manager ---")
+    print("1. Display library")
+    print("2. Load library")
+    print("3. Store library")
+    print("4. Sort library")
+    print("5. Search library")
+    print("6. Play song clip")
+    print("7. Add song")
+    print("8. Remove song")
+    print("9. Update song")
+    print("10. Quit")
 
-print("Before adding songs:")
-print(library)
 
-# Add two songs
-song1 = Song("Blinding Lights", "The Weeknd", "Pop", "", 5)
-song2 = Song("Levitating", "Dua Lipa", "Pop", "", 3)
+def find_song(library: SongLibrary) -> Song | None:
+    attribute = input(
+        "Search by title, artist, genre, rating, or index: "
+    ).strip().lower()
 
-library.perform_add_song(song1)
-library.perform_add_song(song2)
+    if attribute not in ("title", "artist", "genre", "rating", "index"):
+        print("Invalid search field.")
+        return None
 
-print("\nAfter adding songs:")
-print(library)
+    value = input("Enter the search value: ").strip()
+    song = library.perform_search(attribute, value)
 
-print("\nSearch by artist:")
-found_song = library.perform_search("artist", "Dua Lipa")
+    if song is None:
+        print("Song not found.")
 
-if found_song is not None:
-    print(found_song)
-else:
-    print("Song not found.")
+    return song
 
-print("\nSearch for a missing title:")
-found_song = library.perform_search("title", "Missing Song")
+def main() -> None:
+    library = SongLibrary()
 
-if found_song is not None:
-    print(found_song)
-else:
-    print("Song not found.")
+    while True:
+        display_menu()
+        choice = input("Choose an option (1-10): ").strip()
 
-print("\nSearch by index:")
-found_song = library.perform_search("index", "0")
+        if choice == "1":
+            print(library)
 
-if found_song is not None:
-    print(found_song)
-else:
-    print("Song not found.")
+        elif choice == "2":
+            filename = input("File to load: ").strip()
 
-print("\nSong index check:")
-print(library.get_song_index(song1))
-print(library.get_song_index(song2))
+            try:
+                library.perform_load(filename)
+                print("Library loaded.")
+            except OSError as error:
+                print(f"Could not read the file: {error}")
+            except ValueError:
+                print("Invalid file data. Some songs may have loaded.")
 
-another_song = Song("Blinding Lights", "The Weeknd", "Pop", "", 5)
-print(library.get_song_index(another_song))
+        elif choice == "3":
+            filename = input("File to save to: ").strip()
 
-print("\nRemoving Dua Lipa's song:")
-found_song = library.perform_search("artist", "Dua Lipa")
+            try:
+                library.perform_save(filename)
+                print("Library saved.")
+            except OSError as error:
+                print(f"Could not save the file: {error}")
 
-if found_song is not None:
-    index = library.get_song_index(found_song)
-    library.perform_remove_song(index)
-else:
-    print("Song not found.")
+        elif choice == "4":
+            library.perform_sort("title")
+            print("Library sorted by title.")
 
-print(library)
+        elif choice == "5":
+            song = find_song(library)
 
-print("\nUpdated Blinding Lights song:")
-found_song = library.perform_search("title", "Blinding Lights")
+            if song is not None:
+                print(song)
 
-if found_song is not None:
-    index = library.get_song_index(found_song)
-    library.perform_update_song(index, "rating", "4")
-    library.perform_update_song(index, "genre", "Synthwave")
-else:
-    print("Song not found.")
+        elif choice == "6":
+            song = find_song(library)
 
-print(library)
+            if song is not None:
+                song.play_clip()
 
-sort_library = SongLibrary()
+        elif choice in ("7", "8", "9"):
+            print("We will connect this option next.")
 
-sort_library.perform_add_song(
-    Song("Smooth", "Santana", "Rock", "", 4)
-)
-sort_library.perform_add_song(
-    Song("Blinding Lights", "The Weeknd", "Pop", "", 5)
-)
-sort_library.perform_add_song(
-    Song("Levitating", "Dua Lipa", "Pop", "", 3)
-)
+        elif choice == "10":
+            print("Goodbye!")
+            break
 
-print("\nBefore sorting:")
-print(sort_library)
+        else:
+            print("Please enter a number from 1 to 10.")
 
-sort_library.perform_sort("title")
 
-print("\nAfter sorting:")
-print(sort_library)
-
-print("\nSaving the sorted library:")
-sort_library.perform_save("test_library.txt")
-print("Library saved to test_library.txt")
-
-print("\nLoading the saved library:")
-loaded_library = SongLibrary()
-loaded_library.perform_load("test_library.txt")
-print(loaded_library)
-
-audio_song = Song("Blood sweat & Tears", "BTS", "K-Pop", r"clips\Blood Sweat & Tears - BTS - KPop.mp3", 5)
-
-print("\nPlaying audio clip")
-audio_song.play_clip()
+if __name__ == "__main__":
+    main()
