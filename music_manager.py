@@ -1,5 +1,6 @@
 from song_library import Song, SongLibrary
 
+
 library = SongLibrary()
 
 print("Before adding songs:")
@@ -92,3 +93,13 @@ print(sort_library)
 print("\nSaving the sorted library:")
 sort_library.perform_save("test_library.txt")
 print("Library saved to test_library.txt")
+
+print("\nLoading the saved library:")
+loaded_library = SongLibrary()
+loaded_library.perform_load("test_library.txt")
+print(loaded_library)
+
+audio_song = Song("Blood sweat & Tears", "BTS", "K-Pop", r"clips\Blood Sweat & Tears - BTS - KPop.mp3", 5)
+
+print("\nPlaying audio clip")
+audio_song.play_clip()

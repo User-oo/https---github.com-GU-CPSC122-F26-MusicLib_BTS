@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 class Song:
     MIN_RATING = 1
     MAX_RATING = 5
@@ -52,6 +55,25 @@ class Song:
 
     def __lt__(self, other: "Song") -> bool:
         return self._title < other._title
+
+    def play_clip(self) -> None:
+        if not self._clip:
+            print("No audio clip is available for this song.")
+            return
+
+        clip_path = Path(__file__).resolve().parent / self._clip
+
+        if not clip_path.is_file():
+            print(f"Audio file not found: {clip_path}")
+            return
+
+        try:
+            from playsound import playsound
+
+            print(f"Playing clip: {clip_path}")
+            playsound(str(clip_path))
+        except Exception as error:
+            print(f"Could not play the clip: {error}")
 
 class SongLibrary:
     def __init__(self) -> None:
@@ -124,3 +146,22 @@ class SongLibrary:
                 file.write(f"{song.get_attribute_string_value('clip')}\n")
                 file.write(f"{song.get_attribute_string_value('rating')}\n")
                 file.write("\n")  
+
+    def perform_load(self, filename: str) -> None:
+        with open(filename, "r", encoding="utf-8") as file:
+            while True:
+                title_line = file.readline()
+
+                if title_line == "":
+                    break
+
+                title = title_line.rstrip("\n")
+                artist = file.readline().rstrip("\n")
+                genre = file.readline().rstrip("\n")    
+                clip = file.readline().rstrip("\n")
+                rating = int(file.readline().rstrip("\n"))
+
+                file.readline()
+
+                new_song = Song(title, artist, genre, clip, rating)
+                self.perform_add_song(new_song)
