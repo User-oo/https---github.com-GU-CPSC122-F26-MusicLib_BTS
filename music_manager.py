@@ -32,6 +32,60 @@ def find_song(library: SongLibrary) -> Song | None:
 
     return song
 
+def get_rating() -> int:
+    while True:
+        try:
+            rating = int(input("Rating (1-5): "))
+
+            if Song.MIN_RATING <= rating <= Song.MAX_RATING:
+                return rating
+
+            print("Please enter a rating from 1 to 5.")
+        except ValueError:
+            print("Please enter a whole number.")
+
+
+def add_song(library: SongLibrary) -> None:
+    title = input("Title: ").strip()
+    artist = input("Artist: ").strip()
+    genre = input("Genre: ").strip()
+    clip = input("Clip path (Enter for none): ").strip()
+    rating = get_rating()
+
+    song = Song(title, artist, genre, clip, rating)
+    library.perform_add_song(song)
+
+    print("Song added.")
+
+
+def update_song(library: SongLibrary) -> None:
+    song = find_song(library)
+
+    if song is None:
+        return
+
+    print("\nSelected song:")
+    print(song)
+
+    attribute = input(
+        "Attribute to edit (title, artist, genre, clip, rating): "
+    ).strip().lower()
+
+    if attribute not in ("title", "artist", "genre", "clip", "rating"):
+        print("Invalid attribute.")
+        return
+
+    if attribute == "rating":
+        new_value = str(get_rating())
+    else:
+        new_value = input("New value: ").strip()
+
+    index = library.get_song_index(song)
+    library.perform_edit_song(index, attribute, new_value)
+
+    print("\nUpdated song:")
+    print(song)
+
 def main() -> None:
     library = SongLibrary()
 
@@ -78,8 +132,19 @@ def main() -> None:
             if song is not None:
                 song.play_clip()
 
-        elif choice in ("7", "8", "9"):
-            print("We will connect this option next.")
+        elif choice == "7":
+            add_song(library)
+
+        elif choice == "8":
+            song = find_song(library)
+
+            if song is not None:
+                index = library.get_song_index(song)
+                library.perform_remove_song(index)
+                print("Song removed.")
+
+        elif choice == "9":
+            update_song(library)
 
         elif choice == "10":
             print("Goodbye!")
